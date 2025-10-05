@@ -10,6 +10,7 @@ public class TextEditor {
      * @param args command-line arguments.
      */
     public static void main(String[] args) {
+        System.out.println("Compiled!");
         if (args.length != 1) {
             System.err.println("Usage: java TextEditor <filename>");
             System.exit(1);
