@@ -25,8 +25,26 @@ public class GapBuffer {
             buffer[gapStartIndex] = ch;
             gapStartIndex++;
         }
-        else{
-            //expanding
+        else if(gapStartIndex == afterCursorIndex){
+            int oldSize = getSize();
+            int newSize = getSize()*2; 
+            char[] newBuffer = new char[newSize];
+
+            for(int i = 0; i < gapStartIndex; i++){
+                newBuffer[i] = buffer[i];
+            }
+
+            int afterGapLength = oldSize - afterCursorIndex;
+            int newAfterCursorIndex = newSize - afterGapLength;
+            for(int i = 0; i < afterGapLength; i++){
+                newBuffer[newAfterCursorIndex + i] = buffer[afterCursorIndex + i];
+            }
+
+            buffer = newBuffer;
+            afterCursorIndex = newAfterCursorIndex;
+
+            buffer[gapStartIndex] = ch;
+            gapStartIndex++;
         }
     }
 
@@ -73,8 +91,8 @@ public class GapBuffer {
     }
 
     /**
-     * Returns the size of the buffer.
-     * @return the size of the buffer.
+     * Returns the size of the buffer (including the gap).
+     * @return the size of the buffer (including the gap).
      */    
     public int getSize() {
         return buffer.length;

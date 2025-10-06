@@ -6,11 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
+import net.jqwik.api.constraints.IntRange;
 
 public class GapBufferTests {
     @Test
     public void moveLeftRightCornerCases(){
-        GapBuffer arr = new GapBuffer(5);
+        GapBuffer arr = new GapBuffer(2);
         arr.moveLeft();
         assertEquals(0, arr.getCursorPosition());
         arr.moveRight();
@@ -29,6 +30,14 @@ public class GapBufferTests {
         assertEquals(0, arr.getCursorPosition());
         arr.moveLeft();
         assertEquals(0, arr.getCursorPosition());
+
+        //expansion
+        char ch3 = 'c';
+        arr.insert(ch3);
+        arr.moveRight();
+        arr.moveRight();
+        arr.moveRight();
+        assertEquals(3, arr.getCursorPosition());
     }
 
     @Test
@@ -68,7 +77,7 @@ public class GapBufferTests {
 
     @Test
     public void deleteCharAndSize(){
-        GapBuffer st = new GapBuffer(5);
+        GapBuffer st = new GapBuffer(3);
         char ch1 = 'a';
         char ch2 = 'b';
         char ch3 = 'c';
@@ -76,35 +85,60 @@ public class GapBufferTests {
         st.insert(ch2);
         st.insert(ch3);
         assertEquals("abc", st.toString());
-        assertEquals(5, st.getSize());
+        assertEquals(3, st.getSize());
         st.delete();
         assertEquals("ab", st.toString());
-        assertEquals(5, st.getSize());
+        assertEquals(3, st.getSize());
     }
 
     @Test
-    public void charAtgetPos(){
-        GapBuffer st = new GapBuffer(5);
+    public void charAtgetPosAndExpansion(){
+        GapBuffer arr = new GapBuffer(3);
         char ch1 = 'a';
         char ch2 = 'b';
         char ch3 = 'c';
-        st.insert(ch1);
-        st.insert(ch2);
-        st.insert(ch3);
-        assertEquals(3, st.getCursorPosition());
-        assertEquals('a', st.getChar(0));
-        assertEquals('b', st.getChar(1));
-        assertEquals('c', st.getChar(2));
+        arr.insert(ch1);
+        arr.insert(ch2);
+        arr.insert(ch3);
+        assertEquals(3, arr.getCursorPosition());
+        assertEquals('a', arr.getChar(0));
+        assertEquals('b', arr.getChar(1));
+        assertEquals('c', arr.getChar(2));
+
+        //expansion
+        assertEquals(3, arr.getSize());
+        char ch4 = 'd';
+        arr.insert(ch4);
+        assertEquals(6, arr.getSize());
+        arr.delete();
+        assertEquals(6, arr.getSize());
+    }
+
+    @Test
+    public void expansionThreeTimes(){
+        GapBuffer arr = new GapBuffer(1);
+        char ch1 = 'a';
+        char ch2 = 'b';
+        char ch3 = 'c';
+        arr.insert(ch1);
+        arr.insert(ch2);
+        assertEquals(2, arr.getSize());
+        arr.insert(ch3);
+        arr.insert(ch1);
+        assertEquals(4, arr.getSize());
+        arr.insert(ch2);
+        assertEquals(8, arr.getSize());
     }
     
-    //if we just insert any elements, size always equals pos. 
+    //if we delete any number of elements (smaller then array length), the size stays the same
     @Property
-    public void sizeEqualsPos(@ForAll String input){
-        GapBuffer st = new GapBuffer(5);
+    public void sizeEqualsPos(@ForAll @IntRange(min = 0, max = 100) int toDelete, 
+                            @ForAll @IntRange(min = 50, max = 100) int sz){
+        GapBuffer arr = new GapBuffer(sz);
 
-        for(int i = 0; i<input.length(); i++){
-            st.insert(input.charAt(i));
-            assertEquals(st.getCursorPosition(), st.getSize());
+        for(int i = 0; i < toDelete; i++){
+            arr.delete();
+            assertEquals(sz, arr.getSize());
         }
     }
 }
