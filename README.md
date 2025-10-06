@@ -4,7 +4,7 @@
 
 ## Resources Used
 
-+ _(TODO: fill me in)_
++ Oracle Class String documentation: https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#String-char:A-int-int-
 + ...
 + ...
 
