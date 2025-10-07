@@ -3,6 +3,9 @@ package edu.grinnell.csc207.texteditor;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextCharacter;
@@ -16,7 +19,9 @@ import com.googlecode.lanterna.screen.Screen;
 public class TextEditor {
 
     /**
-     * Renders the entire GapBuffer to the given screen, calling screen.refresh() to update the display. 
+     * Renders the entire GapBuffer to the given screen, calling screen.refresh() to update the display.
+     * @param buf GapBuffer whose contents will be on teh screen.
+     * @param screen for rendering.
      * @throws IOException 
      */
     public static void drawBuffer(GapBuffer buf, Screen screen) throws IOException{
@@ -53,13 +58,28 @@ public class TextEditor {
             System.exit(1);
         }
 
-        
+
         String path = args[0];
         System.out.format("Loading %s...\n", path);
+        
 
         Screen screen = new DefaultTerminalFactory().createScreen();
         screen.startScreen();
         GapBuffer buf = new GapBuffer(50);
+
+        Path pathText = Paths.get(path);
+        if (Files.exists(pathText) && Files.isRegularFile(pathText)) {
+            String text = Files.readString(pathText);
+
+            for (int i = 0; i < text.length(); i++) {
+                char ch = text.charAt(i);
+                buf.insert(ch);
+            }
+            System.out.println("File path read correctly!");
+        } 
+        else {
+            System.out.println("Incorrect file path!");
+        }
 
         boolean isRunning = true;
         while (isRunning) {
@@ -85,6 +105,11 @@ public class TextEditor {
                 drawBuffer(buf, screen);
             }
         }
+
+        Files.writeString(pathText, buf.toString());
+
         screen.stopScreen();
+
+        System.out.println("File saved!");
     }
 }
