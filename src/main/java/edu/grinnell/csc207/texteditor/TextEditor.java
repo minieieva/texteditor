@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 
 /**
@@ -35,7 +37,6 @@ public class TextEditor {
             }
 
         }
-
         screen.setCursorPosition(new TerminalPosition(buf.getCursorPosition(), row));
         screen.refresh();
     }
@@ -52,19 +53,38 @@ public class TextEditor {
             System.exit(1);
         }
 
-        // TODO: fill me in with a text editor TUI!
+        
         String path = args[0];
         System.out.format("Loading %s...\n", path);
 
         Screen screen = new DefaultTerminalFactory().createScreen();
         screen.startScreen();
-        GapBuffer buf = new GapBuffer(2);
-        buf.insert('H');
-        buf.insert('i');
-        drawBuffer(buf, screen);
-        
-        System.out.println("Press something to stop the screen");
-        screen.readInput();
+        GapBuffer buf = new GapBuffer(50);
+
+        boolean isRunning = true;
+        while (isRunning) {
+            KeyStroke stroke = screen.readInput();
+            KeyType stroke_type = stroke.getKeyType();
+
+            if(stroke_type == KeyType.Escape){
+                isRunning = false;
+            }
+            else{
+                if(stroke_type == KeyType.Character){
+                    buf.insert(stroke.getCharacter());
+                }
+                else if(stroke_type == KeyType.ArrowLeft){
+                    buf.moveLeft();
+                }
+                else if(stroke_type == KeyType.ArrowRight){
+                    buf.moveRight();
+                }
+                else if(stroke_type == KeyType.Backspace){
+                    buf.delete();
+                }
+                drawBuffer(buf, screen);
+            }
+        }
         screen.stopScreen();
     }
 }
