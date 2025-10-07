@@ -1,16 +1,24 @@
 # CSC 207: Text Editor
 
-**Author**: Mariia Minieieva
+**Author**: Mariia Minieieva, Nicolas Sulimov
 
 ## Resources Used
 
 + Oracle Class String documentation: https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#String-char:A-int-int-
 + Lab List implementation: https://osera.cs.grinnell.edu/ttap/data-structures-labs/list-implementation.html
-+ ...
++ Lanterna documentation: https://mabe02.github.io/lanterna/apidocs/3.0/com/googlecode/lanterna/
 
 ## Changelog
 
-_(TODO: fill me in with a log of your committed changes)_
+1. Update README.md
+2. Part 1 done: A Simple String Buffer
+3. Part 2 done: Analyzing the Simple String Buffer
+4. Part 3 done: Gap Buffers, testing from StringBuffer passes
+5. Expanding the Gap Buffer done
+6. Part 4: A simple TUI (before rendering) done
+7. Rendering done
+8. Input-Output done
+9. File Input/Output done
 
 ## insert method of SimpleStringBuffer: runtime analysis
 Relevant inputs: n is the size of the current buffer

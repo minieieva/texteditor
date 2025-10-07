@@ -37,12 +37,12 @@ public class TextEditor {
                 col = 0;
             }
             else{
-            screen.setCharacter(row, col, new TextCharacter(ch));
+            screen.setCharacter(col, row, new TextCharacter(ch));
             col++;
             }
 
         }
-        screen.setCursorPosition(new TerminalPosition(buf.getCursorPosition(), row));
+        screen.setCursorPosition(new TerminalPosition(buf.getCursorPosition(), 0));
         screen.refresh();
     }
 
@@ -65,7 +65,7 @@ public class TextEditor {
 
         Screen screen = new DefaultTerminalFactory().createScreen();
         screen.startScreen();
-        GapBuffer buf = new GapBuffer(50);
+        GapBuffer buf = new GapBuffer(2);
 
         Path pathText = Paths.get(path);
         if (Files.exists(pathText) && Files.isRegularFile(pathText)) {
